@@ -71,5 +71,12 @@ connectDB().then(() => {
     });
 })
 
+const path = require("path");
+
+app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+});
 
 //   mongodb+srv://Arsalan:K1dBhTK3KowW0ZBp@cluster0.f9zzguk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
