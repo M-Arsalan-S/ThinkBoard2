@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/M-Arsalan-S/mern-thinkboard.git"
+    "url": "git+https://github.com/M-Arsalan-S/ThinkBoard2.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/M-Arsalan-S/mern-thinkboard/issues"
+    "url": "https://github.com/M-Arsalan-S/ThinkBoard2/issues"
   },
-  "homepage": "https://github.com/M-Arsalan-S/mern-thinkboard#readme"
+  "homepage": "https://github.com/M-Arsalan-S/ThinkBoard2#readme"
 }
