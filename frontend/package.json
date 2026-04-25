@@ -13,7 +13,7 @@
     "amazon-cognito-identity-js": "^6.3.16",
     "axios": "^1.10.0",
     "lucide-react": "^0.525.0",
-    "mern-thinkboard": "file:..",
+    "thinkboard2": "file:..",
     "oidc-client-ts": "^3.4.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
