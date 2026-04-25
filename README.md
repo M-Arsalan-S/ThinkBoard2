@@ -56,8 +56,8 @@ If you'd like to run the project in development mode:
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/M-Arsalan-S/ThinkBoard2.git
-cd ThinkBoard2
+git clone https://github.com/M-Arsalan-S/mern-thinkboard.git
+cd mern-thinkboard
 ```
 
 ### 2. Configure Environment Variables
