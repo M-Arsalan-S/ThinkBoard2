@@ -1,18 +1,18 @@
 services:
   backend:
-    build: ./backend
-    container_name: thinkboard-backend
+    image: arsalan7/thinkboard-backend:latest # Use Docker Hub image
+    container_name: thinkboard-backend-test
     ports:
       - "5001:5001"
     env_file:
-      - ./backend/.env
+      - .env # Look for .env in the current folder
     environment:
       - NODE_ENV=production
     restart: always
 
   frontend:
-    build: ./frontend
-    container_name: thinkboard-frontend
+    image: arsalan7/thinkboard-frontend:latest # Use Docker Hub image
+    container_name: thinkboard-frontend-test
     ports:
       - "80:80"
     depends_on:
