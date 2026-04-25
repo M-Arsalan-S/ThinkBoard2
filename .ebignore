@@ -1,0 +1,7 @@
+node_modules
+.git
+.env
+*.zip
+MERN-ThinkBoard-AWS.zip
+frontend/node_modules
+backend/node_modules

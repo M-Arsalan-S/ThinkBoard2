@@ -1,9 +1,9 @@
-import { ArrowBigLeftIcon } from 'lucide-react';
+import { ArrowLeftIcon, Loader2 } from 'lucide-react';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router';
-import axios from "axios";
 import api from '../lib/axios';
+import Navbar from '../components/Navbar';
 
 const CreatePage = () => {
   const [title,setTitle] = useState("");
@@ -13,7 +13,7 @@ const CreatePage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();  // to avoid refreshing page on submission
+    e.preventDefault();
 
     if(!title.trim() || !content.trim()){
       toast.error("All fields are required");
@@ -30,7 +30,7 @@ const CreatePage = () => {
       navigate("/");
     } catch (error) {
       console.log("Error creating note:", error);
-      if(error.response.status === 429){
+      if(error.response?.status === 429){
         toast.error("Slow down! You're creating notes too fast", {
           duration: 4000,
           icon: "💀",
@@ -44,43 +44,54 @@ const CreatePage = () => {
   }
 
   return ( 
-    <div className='min-h-screen bg-base-200'>
-      <div className='container mx-auto px-4 py-8'>
-        <div className='max-w-2xl mx-auto'>
-          <Link to={"/"} className="btn btn-ghost mb-6">
-            <ArrowBigLeftIcon className='size-5' />
+    <div className='flex flex-col min-h-screen relative z-10'>
+      <Navbar />
+      <div className='container mx-auto px-4 py-8 flex-1 flex flex-col'>
+        <div className='max-w-3xl mx-auto w-full'>
+          <Link to={"/"} className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group">
+            <ArrowLeftIcon className='w-5 h-5 group-hover:-translate-x-1 transition-transform' />
             Back to Notes
           </Link>
 
-          <div className='card bg-base-100'>
-            <div className='card-body'>
-              <h2 className='card-title text-2xl mb-4'>Create New Note</h2>
-              <form onSubmit={handleSubmit}>
-                <div className='form-control mb-4'>
-                  <label className="label">
-                    <span className='label-text'>Title</span>
-                  </label>
-                  <input type='text' placeholder='Note Title' className='input input-bordered'
+          <div className='bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.3)]'>
+            <h2 className='text-3xl font-bold text-white mb-8 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent'>Create New Note</h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className='space-y-2'>
+                <label className="text-sm font-medium text-gray-300 ml-1">Title</label>
+                <input 
+                  type='text' 
+                  placeholder='Enter a catchy title...' 
+                  className='w-full bg-black/40 border border-white/10 rounded-xl py-4 px-4 text-white text-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#00FF9D]/50 focus:border-transparent transition-all'
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}/>
-                </div>
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
 
-                <div className='form-control mb-4'>
-                  <label className="label">
-                    <span className='label-text'>Content</span>
-                  </label>
-                  <textarea type='text' placeholder='Write your note here...' className='textarea textarea-bordered h-32'
+              <div className='space-y-2'>
+                <label className="text-sm font-medium text-gray-300 ml-1">Content</label>
+                <textarea 
+                  placeholder='What is on your mind?' 
+                  className='w-full bg-black/40 border border-white/10 rounded-xl py-4 px-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#00FF9D]/50 focus:border-transparent transition-all min-h-[200px] resize-y'
                   value={content}
-                  onChange={(e) => setContent(e.target.value)}/>
-                </div>
+                  onChange={(e) => setContent(e.target.value)}
+                />
+              </div>
 
-                <div className="card-actions justify-end">
-                  <button type='submit' className='btn btn-primary' disabled={loading}>
-                    {loading? "Creating...":"Create Note"}
-                  </button>
-                </div>
-              </form>
-            </div>
+              <div className="pt-4 flex justify-end">
+                <button 
+                  type='submit' 
+                  disabled={loading}
+                  className='bg-[#00FF9D] text-black font-bold py-3 px-8 rounded-xl hover:bg-[#00cc7d] transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(0,255,157,0.3)] hover:shadow-[0_0_30px_rgba(0,255,157,0.5)] disabled:opacity-70 disabled:hover:shadow-[0_0_20px_rgba(0,255,157,0.3)]'
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin"/>
+                      Saving...
+                    </>
+                  ) : "Create Note"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

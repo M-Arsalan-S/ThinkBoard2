@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams, Link } from 'react-router';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
-import { ArrowLeftIcon, Trash2Icon, LoaderIcon } from 'lucide-react';
-import { useParams, Link } from 'react-router';
+import { ArrowLeftIcon, Trash2Icon, Loader2, SaveIcon } from 'lucide-react';
+import Navbar from '../components/Navbar';
 
 const NoteDetailPage = () => {
   const [note,setNote] = useState(null);
@@ -12,7 +11,6 @@ const NoteDetailPage = () => {
   const [saving,setSaving] = useState(false);
 
   const navigate = useNavigate();
-
   const {id} = useParams();
 
   useEffect(() => {
@@ -53,7 +51,7 @@ const NoteDetailPage = () => {
     setSaving(true);
 
     try {
-      await api.put(`notes/${id}`,note);
+      await api.put(`/notes/${id}`,note);
       toast.success("Note updated successfully");
       navigate("/");
     } catch (error) {
@@ -66,49 +64,72 @@ const NoteDetailPage = () => {
 
   if(loading){
     return (
-      <div className='min-h-screen bg-base-200 flex items-center justify-center'>
-        <LoaderIcon className='animate-spin size-10' />
+      <div className='min-h-screen flex flex-col relative z-10'>
+        <Navbar />
+        <div className='flex-1 flex items-center justify-center'>
+            <Loader2 className='w-10 h-10 text-[#00FF9D] animate-spin' />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className='min-h-screen bg-base-200'>
-      <div className='container mx-auto px-4 py-8'>
-        <div className='max-w-2xl mx-auto'>
-          <div className='flex items-center justify-between mb-6'>
-            <Link to='/' className='btn btn-ghost'>
-              <ArrowLeftIcon className='h-5 w-5' />
-            </Link>
-            <button onClick={handleDelete} className='btn btn-error btn-outline'>
-              <Trash2Icon className='h-5 w-5' />
-              Delete Note
-            </button>
+    <div className='flex flex-col min-h-screen relative z-10'>
+      <Navbar />
+      <div className='container mx-auto px-4 py-8 flex-1 flex flex-col'>
+        <div className='max-w-3xl mx-auto w-full'>
+          <div className='flex justify-between items-center mb-8'>
+              <Link to={"/"} className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors group">
+                <ArrowLeftIcon className='w-5 h-5 group-hover:-translate-x-1 transition-transform' />
+                Back to Notes
+              </Link>
+              <button 
+                onClick={handleDelete} 
+                className='inline-flex items-center gap-2 text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 px-4 py-2 rounded-xl transition-all'
+              >
+                <Trash2Icon className='w-4 h-4' />
+                <span className="text-sm font-medium">Delete</span>
+              </button>
           </div>
 
-          <div className='card bg-base-100'>
-            <div className='card-body'>
-              <div className='form-control mb-4'>
-                <label className="label">
-                  <span className='label-text'>Title</span>
-                </label>
-                <input type='text' placeholder='Note Title' className='input input-bordered'
-                value={note.title}
-                onChange={(e) => setNote({ ...note, title: e.target.value})}/>
+          <div className='bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.3)]'>
+            <div className='space-y-6'>
+              <div className='space-y-2'>
+                <input 
+                  type='text' 
+                  placeholder='Note Title' 
+                  className='w-full bg-transparent border-b border-white/10 py-4 text-white text-3xl font-bold placeholder-gray-600 focus:outline-none focus:border-[#00FF9D]/50 transition-colors'
+                  value={note.title}
+                  onChange={(e) => setNote({ ...note, title: e.target.value})}
+                />
               </div>             
               
-              <div className='form-control mb-4'>
-                <label className="label">
-                  <span className='label-text'>Content</span>
-                </label>
-                <textarea type='text' placeholder='Write your note here...' className='textarea textarea-bordered h-32'
-                value={note.content}
-                onChange={(e) => setNote({...note, content: e.target.value})}/>
+              <div className='space-y-2'>
+                <textarea 
+                  placeholder='Write your note here...' 
+                  className='w-full bg-black/20 border border-white/10 rounded-xl py-4 px-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#00FF9D]/50 focus:border-transparent transition-all min-h-[300px] resize-y text-lg leading-relaxed'
+                  value={note.content}
+                  onChange={(e) => setNote({...note, content: e.target.value})}
+                />
               </div>
 
-              <div className='card-actions justify-end'>
-                <button className='btn btn-primary' disabled={saving} onClick={handleSave}>
-                  {saving? "Saving...":"Save Changes"}
+              <div className='pt-4 flex justify-end'>
+                <button 
+                  className='bg-[#00FF9D] text-black font-bold py-3 px-8 rounded-xl hover:bg-[#00cc7d] transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(0,255,157,0.3)] hover:shadow-[0_0_30px_rgba(0,255,157,0.5)] disabled:opacity-70 disabled:hover:shadow-[0_0_20px_rgba(0,255,157,0.3)]' 
+                  disabled={saving} 
+                  onClick={handleSave}
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <SaveIcon className="w-5 h-5" />
+                      Save Changes
+                    </>
+                  )}
                 </button>
               </div>
             </div>
