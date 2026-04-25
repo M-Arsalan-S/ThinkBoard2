@@ -4,11 +4,14 @@ import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import { ArrowLeftIcon, Trash2Icon, Loader2, SaveIcon } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import DeleteModal from '../components/DeleteModal';
 
 const NoteDetailPage = () => {
   const [note,setNote] = useState(null);
   const [loading,setLoading] = useState(true);
   const [saving,setSaving] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const navigate = useNavigate();
   const {id} = useParams();
@@ -29,16 +32,22 @@ const NoteDetailPage = () => {
     fetchNote();
   },[id]);
 
-  const handleDelete = async() => {
-    if(!window.confirm("Are you sure you want to delete this note?"))
-      return;
+  const handleDelete = () => {
+    setIsModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    setIsDeleting(true);
     try {
       await api.delete(`/notes/${id}`);
       toast.success("Note deleted successfully");
       navigate("/");
     } catch (error) {
-      console.log("Error in handleDelete:",error);
+      console.log("Error in confirmDelete:", error);
       toast.error("Failed to delete note");
+    } finally {
+      setIsDeleting(false);
+      setIsModalOpen(false);
     }
   };
 
@@ -136,6 +145,12 @@ const NoteDetailPage = () => {
           </div>
         </div>
       </div>
+      <DeleteModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDelete}
+        loading={isDeleting}
+      />
     </div>
   )
 }
